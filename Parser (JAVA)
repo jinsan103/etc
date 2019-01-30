@@ -1,0 +1,168 @@
+/*
+  * 학번 : 12152044
+  * 이름 : 김진산
+  * 사용언어 :JAVA
+  * 과목명 : 프로그래밍 언어론
+  * 파일 내의  하나하나를 parsing 함
+ */
+package test;
+
+import java.io.*;
+
+public class Pattern_matcher {
+
+	public static void main(String[] args) {
+		FileReader fd = null;
+		try {
+			fd = new FileReader("C:\\Users\\jinsan\\eclipse-workspace\\test\\src\\test\\front.txt");
+
+		} catch (FileNotFoundException e) {
+			System.out.println("ERROR - Cannot Open File");
+		} 
+		BufferedReader reader = new BufferedReader(fd);//파일리더
+		String str = null;
+		String[] arr = null;
+
+		try {
+			while ((str = reader.readLine()) != null) {
+				arr = str.split(" ");//공백으로 구분
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Parser parser = new Parser();
+		for (int i = 0; i < arr.length; i++) {
+			parser.getChar(arr[i]);
+			parser.lex(arr[i]);
+			parser.print(arr[i]);
+		}
+		parser.getChar("EOF");//split 함수가 eof를 인지하지 못함
+		parser.lex("EOF");
+		parser.print("EOF");
+	}
+}
+
+class Parser {
+
+	int charClass = 0; // 0=letter 1=digit 2=unknown 3=space 9=eof
+	String[] lexeme = new String[100];// 들어온 글자
+	int lexLen = 0;// 배열 삽입 index
+	int count = 0;// 출력 배열 index
+	int nextToken = 0;// 토큰 배열에 사용할 index
+
+	String[] token = { "INT_LIT", "IDENT", "ASSIGN_OP", "ADD_OP", "SUB_OP", "MULT_OP", "DIV_OP", "LEFT_PAREN",
+
+			"RIGHT_PAREN", "EOF" };// 토큰 종류를 알려줌
+
+	public int lookup(String ch) {
+
+		switch (ch) {
+
+		case "(":
+			addChar(ch);
+			nextToken = 7;
+			break;
+
+		case ")":
+			addChar(ch);
+			nextToken = 8;
+			break;
+
+		case "+":
+			addChar(ch);
+			nextToken = 3;
+			break;
+
+		case "-":
+			addChar(ch);
+			nextToken = 4;
+			break;
+
+		case "*":
+			addChar(ch);
+			nextToken = 5;
+			break;
+
+		case "/":
+			addChar(ch);
+			nextToken = 6;
+			break;
+
+		case "EOF":
+			addChar("EOF");
+			nextToken = 9;
+			break;
+		}
+		return nextToken;
+	}
+
+	public void addChar(String ch) {// 글자 배열에 글자를 추가
+
+		if (lexLen <= 98) {
+			lexeme[lexLen] = ch;
+			lexLen += 1;
+			lexeme[lexLen] = "EOF";
+		} else {
+			System.out.println("ERROR - LEXEME IS TOO LONG");
+		}
+	}
+
+	public void getChar(String ch) {
+		if (ch == "EOF") {
+			charClass = 9;
+		} else {
+			if (isDigit(ch)) {// 숫자
+				charClass = 1;
+			} else if (isAlpha(ch)) {// 알파벳
+				charClass = 0;
+			} else {
+				charClass = 2;
+			}
+		}
+
+	}
+	public boolean isAlpha(String ch) {//자바에 c의 isAlpha()가 없어서 직접 구현
+		return ch.matches("^[a-zA-Z]*$");
+	}
+
+	public boolean isDigit(String ch) {
+		return ch.matches("^[0-9]*$");
+	}
+
+	public void lex(String ch) {
+
+		switch (charClass) {
+
+		case 0:// letter
+			addChar(ch);
+			nextToken = 1;
+			break;
+
+		case 1:// digit
+			addChar(ch);
+			nextToken = 0;
+			break;
+
+		case 2:// unknown
+			lookup(ch);
+			break;
+
+		case 9://eof
+			nextToken = 9;
+			break;
+
+		}
+	}
+
+	public void print(String ch) {
+		if (ch == "EOF") {
+			System.out.println("Next Token is:\t" + token[nextToken] + "\t\tNext lexeme is\tEOF");
+		} else if (token[nextToken].length() > 7) {// 이쁘게 보이기 위함
+			System.out.println("Next Token is:\t" + token[nextToken] + "\tNext lexeme is\t" + lexeme[count]);
+			count++;
+		} else {
+			System.out.println("Next Token is:\t" + token[nextToken] + "\t\tNext lexeme is\t" + lexeme[count]);
+			count++;
+		}
+	}
+}
