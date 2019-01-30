@@ -1,0 +1,540 @@
+package test;
+
+/*
+ * ID : 12152044
+ * NAME : JIN SAN KIM
+ * JAVA GUI를 이용해 구현한 계산기
+ * jsp의 문자열을 그대로 계산해주는 eval 함수를 사용한점이 특징
+ */
+import java.awt.EventQueue;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.GridLayout;
+import java.awt.TextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.util.*;
+import javax.script.*;
+import java.util.Arrays;
+
+public class Calculator {
+
+	private JFrame frame;
+	private JTextField textField;
+	private JPanel panel_1;
+	private JButton btnNewButton;
+	private JButton btnNewButton_1;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JButton btnNewButton_5;
+	private JButton btnNewButton_6;
+	private JButton btnNewButton_7;
+	private JButton btnNewButton_8;
+	private JButton btnNewButton_9;
+	private JButton btnNewButton_10;
+	private JButton btnNewButton_11;
+	private JButton btnNewButton_12;
+	private JButton btnNewButton_13;
+	private JButton btnNewButton_14;
+	private JButton btnNewButton_15;
+	List<String> arr = new ArrayList<String>();// input stream array
+	String result;// textField string
+	String cal;// result of calculation(string)
+	int res;// result of calculation(int)
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Calculator window = new Calculator();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the application.
+	 */
+	public Calculator() {
+		initialize();
+	}
+
+	public boolean isPlus(String ch) {// parser for operator
+		return ch.matches("[+]");
+	}
+
+	public boolean isMin(String ch) {
+		return ch.matches("-");
+	}
+
+	public boolean isMul(String ch) {
+		return ch.matches("[*]");
+	}
+
+	public boolean isDiv(String ch) {
+		return ch.matches("\\/");
+	}
+
+	
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setResizable(false);
+		frame.setBounds(100, 100, 500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(0, 0, 494, 36);
+		frame.getContentPane().add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		textField = new JTextField();
+		panel.add(textField);
+		textField.setColumns(10);
+		textField.setBounds(0, 0, 494, 36);
+
+		ScriptEngineManager mgr = new ScriptEngineManager();
+		ScriptEngine engine = mgr.getEngineByName("JavaScript");
+
+		panel_1 = new JPanel();
+		panel_1.setBounds(0, 35, 494, 437);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(new GridLayout(4, 4, 5, 5));
+
+		btnNewButton_1 = new JButton("7");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")// when operator + 0
+																								// format, 0->other
+																								// number
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);// remove 0
+						textField.setText(result);
+						textField.setText(textField.getText().concat("7"));
+						arr.add("7");
+
+					} else {
+						textField.setText(textField.getText().concat("7"));
+						arr.add("7");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("7"));
+					arr.add("7");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_1);
+
+		btnNewButton_2 = new JButton("8");
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("8"));
+						arr.add("8");
+
+					} else {
+						textField.setText(textField.getText().concat("8"));
+						arr.add("8");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("8"));
+					arr.add("8");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_2);
+
+		btnNewButton = new JButton("9");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("9"));
+						arr.add("9");
+
+					} else {
+						textField.setText(textField.getText().concat("9"));
+						arr.add("9");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("9"));
+					arr.add("9");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton);
+
+		btnNewButton_3 = new JButton("/");
+		btnNewButton_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+
+				if (isPlus(arr.get(arr.size() - 1)) || isDiv(arr.get(arr.size() - 1)) || isMin(arr.get(arr.size() - 1))
+						|| isMul(arr.get(arr.size() - 1))) {// when operator setted right after operator, change it
+					arr.remove(arr.size() - 1);
+					arr.add("/");
+					result = result.substring(0, result.length() - 1);
+					textField.setText(result);
+					textField.setText(textField.getText().concat("/"));
+
+				} else {
+					arr.add("/");
+					textField.setText(textField.getText().concat("/"));
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_3);
+
+		btnNewButton_4 = new JButton("4");
+		btnNewButton_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("4"));
+						arr.add("4");
+
+					} else {
+						textField.setText(textField.getText().concat("4"));
+						arr.add("4");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("4"));
+					arr.add("4");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_4);
+
+		btnNewButton_5 = new JButton("5");
+		btnNewButton_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("5"));
+						arr.add("5");
+
+					} else {
+						textField.setText(textField.getText().concat("5"));
+						arr.add("5");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("5"));
+					arr.add("5");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_5);
+
+		btnNewButton_8 = new JButton("6");
+		btnNewButton_8.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("6"));
+						arr.add("6");
+
+					} else {
+						textField.setText(textField.getText().concat("6"));
+						arr.add("6");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("6"));
+					arr.add("6");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_8);
+
+		btnNewButton_11 = new JButton("*");
+		btnNewButton_11.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+
+				if (isPlus(arr.get(arr.size() - 1)) || isDiv(arr.get(arr.size() - 1)) || isMin(arr.get(arr.size() - 1))
+						|| isMul(arr.get(arr.size() - 1))) {
+					arr.remove(arr.size() - 1);
+					arr.add("*");
+					result = result.substring(0, result.length() - 1);
+					textField.setText(result);
+					textField.setText(textField.getText().concat("*"));
+
+				} else {
+					arr.add("*");
+					textField.setText(textField.getText().concat("*"));
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_11);
+
+		btnNewButton_13 = new JButton("1");
+		btnNewButton_13.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("1"));
+						arr.add("1");
+
+					} else {
+						textField.setText(textField.getText().concat("1"));
+						arr.add("1");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("1"));
+					arr.add("1");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_13);
+
+		btnNewButton_14 = new JButton("2");
+		btnNewButton_14.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("2"));
+						arr.add("2");
+
+					} else {
+						textField.setText(textField.getText().concat("2"));
+						arr.add("2");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("2"));
+					arr.add("2");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_14);
+
+		btnNewButton_12 = new JButton("3");
+		btnNewButton_12.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+				if (arr.size() >= 2) {
+					if (isPlus(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isDiv(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMin(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")
+							|| isMul(arr.get(arr.size() - 2)) && arr.get(arr.size() - 1).equals("0")) {
+
+						result = result.substring(0, result.length() - 1);
+						textField.setText(result);
+						textField.setText(textField.getText().concat("3"));
+						arr.add("3");
+
+					} else {
+						textField.setText(textField.getText().concat("3"));
+						arr.add("3");
+
+					}
+				} else {
+					textField.setText(textField.getText().concat("3"));
+					arr.add("3");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_12);
+
+		btnNewButton_15 = new JButton("-");
+		btnNewButton_15.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+
+				if (isPlus(arr.get(arr.size() - 1)) || isDiv(arr.get(arr.size() - 1)) || isMin(arr.get(arr.size() - 1))
+						|| isMul(arr.get(arr.size() - 1))) {
+					arr.remove(arr.size() - 1);
+					arr.add("-");
+					result = result.substring(0, result.length() - 1);
+					textField.setText(result);
+					textField.setText(textField.getText().concat("-"));
+
+				} else {
+					arr.add("-");
+					textField.setText(textField.getText().concat("-"));
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_15);
+
+		btnNewButton_10 = new JButton("C");
+		btnNewButton_10.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				textField.setText("");
+				arr.clear();
+			}
+		});
+		panel_1.add(btnNewButton_10);
+
+		btnNewButton_9 = new JButton("0");
+		btnNewButton_9.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+
+				if (isPlus(arr.get(arr.size() - 1)) || isDiv(arr.get(arr.size() - 1)) || isMin(arr.get(arr.size() - 1))
+						|| isMul(arr.get(arr.size() - 1))) {
+					textField.setText(textField.getText().concat("0"));
+					arr.add("0");
+				} else {
+					textField.setText(textField.getText().concat("0"));
+					arr.add("0");
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_9);
+
+		btnNewButton_6 = new JButton("=");
+		btnNewButton_6.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				textField.setText(textField.getText().concat("="));
+
+				try {
+					result = "";
+					for (String el : arr)
+						result += el;
+					double _res = Double.valueOf(engine.eval(result).toString());
+					res = (int) _res;// convert to integer
+
+				} catch (ScriptException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				cal = String.valueOf(res);
+				textField.setText(textField.getText().concat(cal));
+				arr.clear();
+				arr.add(cal);// add result of calculation
+			}
+		});
+		panel_1.add(btnNewButton_6);
+
+		btnNewButton_7 = new JButton("+");
+		btnNewButton_7.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				result = String.join("", arr);
+
+				if (isPlus(arr.get(arr.size() - 1)) || isDiv(arr.get(arr.size() - 1)) || isMin(arr.get(arr.size() - 1))
+						|| isMul(arr.get(arr.size() - 1))) {
+					arr.remove(arr.size() - 1);
+					arr.add("+");
+					result = result.substring(0, result.length() - 1);
+					textField.setText(result);
+					textField.setText(textField.getText().concat("+"));
+
+				} else {
+					arr.add("+");
+					textField.setText(textField.getText().concat("+"));
+
+				}
+			}
+		});
+		panel_1.add(btnNewButton_7);
+	}
+}
